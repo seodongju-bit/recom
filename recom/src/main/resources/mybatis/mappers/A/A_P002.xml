@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="A.A_P002">
+	<resultMap id="A_P001Result01" type="A_P001VO">
+		<result property="mem_no" column="mem_no" />
+		<result property="mem_id" column="mem_id" />
+		<result property="mem_pw" column="mem_pw" />
+		<result property="mem_nick" column="mem_nick" />
+		<result property="mem_name" column="mem_name" />
+		<result property="mem_email1" column="mem_email1" />
+		<result property="mem_email2" column="mem_email2" />
+		<result property="mem_tel" column="mem_tel" />
+		<result property="mem_zip" column="mem_zip" />
+		<result property="mem_address1" column="mem_address1" />
+		<result property="mem_address2" column="mem_address2" />
+		
+		
+		<result property="mem_tel" column="mem_tel" />
+		
+	</resultMap>	
+
+	
+	<select id="selectOverlappedID" parameterType="String" resultType="String">
+	   select decode(count(*),1, 'true', 0, 'false')
+	   from members
+	   where mem_id = #{id}
+	</select>
+	
+	
+	<select id="selectOverlappedEMAIL" parameterType="String" resultType="String">
+	   select decode(count(*),1, 'true', 0, 'false')
+	   from members
+	   where mem_email1  = #{mem_email1} 
+	   and mem_email2 = #{mem_email2}
+	</select>
+	
+	<select id="selectOverlappedNICK" parameterType="String" resultType="String">
+	   select decode(count(*),1, 'true', 0, 'false')
+	   from members
+	   where mem_nick = #{nick}
+	</select>  
+	
+  <insert id="insertNewMember"  parameterType="A_P001VO">
+  <![CDATA[
+    	insert into members			(mem_id,
+				 					 mem_pw,
+				 					 mem_nick,
+                                     mem_name,
+                                     mem_email1,
+                                     mem_email2,
+                                     mem_tel,
+                                     mem_zip,
+                                     mem_address1,
+                                     mem_address2,
+                                     mem_division,
+                                     mem_no,
+                                     mem_date)
+							 values(#{mem_id},
+									#{mem_pw},
+									#{mem_nick},
+                                 	#{mem_name},
+                                   	#{mem_email1},
+                                   	#{mem_email2},
+                                   	#{mem_tel},
+                                    #{mem_zip},
+                                    #{mem_address1},
+                                   	#{mem_address2},
+                                   	#{mem_division},
+                                   	mem_no.nextval,
+                                   	sysdate)
+                                             
+   ]]>      
+  </insert>
+  
+  <update id="verifyMember" parameterType="java.util.Map">
+				update members set mem_verify='y' where	mem_email1=#{mem_email1} and mem_email2=#{mem_email2}
+		</update>
+  
+  
+</mapper>

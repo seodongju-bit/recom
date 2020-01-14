@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="mapper.event">
+	<resultMap id="eventResult" type="eventVO">
+		<result property="no_number" column="no_number" />
+        <result property="mem_id" column="mem_id" />
+        <result property="no_contents" column="no_contents" />
+        <result property="no_division" column="no_division" />
+        <result property="no_title" column="no_title" />
+        <result property="imagefilename" column="imagefilename" />
+        <result property="writedate" column="writedate" />
+        <result property="view_cnt" column="view_cnt" />
+        <result property="no_stdate" column="no_stdate" />
+        <result property="no_enddate" column="no_enddate" />
+        <result property="no_banner" column="no_banner" />
+	</resultMap> 
+	
+	<select id="selectAllEventList" resultMap="eventResult">
+      <![CDATA[
+         	
+      
+					SELECT  no_number, 
+         view_cnt, 
+         no_division, 
+         mem_id, 
+         no_contents, 
+         no_title, 
+         to_char(writedate,'YYYY-MM-DD') as writedate
+		FROM (
+			SELECT ROWNUM RN, A.* 
+				FROM (
+						SELECT * 
+						FROM notice
+						ORDER BY no_number DESC 
+						) A
+				)
+		WHERE RN BETWEEN #{start} AND #{end}
+      	
+      	
+      ]]>
+	</select>
+	
+	 <select id="selectBoardDetail" parameterType="java.util.Map" resultType="java.util.HashMap">
+
+      <![CDATA[
+         select 
+         no_number, 
+         view_cnt, 
+         no_division, 
+         no_contents, 
+         no_title, 
+         to_char(writedate,'YYYY-MM-DD') as writedate
+         
+         from notice
+         
+         where no_number=#{no_number}
+      ]]>
+	</select>
+
+
+	<update id="updateCnt" parameterType="java.util.HashMap">
+	<![CDATA[
+        update notice
+        set
+        view_cnt= nvl(view_cnt,0) + 1
+         where 
+         no_number=#{no_number}
+      ]]>
+	</update>
+	
+	<insert id="insertEvent" parameterType="java.util.HashMap">
+		<![CDATA[
+			insert into notice  (no_number, mem_id, no_contents, no_division, no_title, writedate, view_cnt, no_stdate, no_enddate, no_banner) 
+			
+			values
+			
+			(seq.nextval, #{mem_id}, #{no_contents}, #{no_division}, #{no_title}, sysdate, 0, #{no_stdate}, #{no_enddate}, #{no_banner})
+			
+		]]>
+	</insert>
+	
+	<select id="countBoard" resultType="int">
+	<![CDATA[
+	SELECT COUNT(*) FROM notice
+	]]>
+	</select>
+	
+	
+	
+	<select id="searchSale" parameterType="java.util.Map" resultType="java.util.HashMap">
+
+      <![CDATA[
+         select *
+         from productsell ps, product p
+       	 where ps.pro_number = p.pro_number
+            and( sell_number like '%${p_id}%'
+        	or sell_title like '%${p_id}%'
+         	or pro_brand like '%${p_id}%'
+         	or pro_vendor like '%${p_id}%'
+         	or ps.mem_id like '%${p_id}%')
+         order by sell_number
+        
+      ]]>
+	</select>
+	
+	
+	<insert id="addItem" parameterType="java.util.HashMap">
+		<![CDATA[
+			insert into eventitems (no_number, sell_number) 
+			values((select max(no_number)
+				from notice
+				where no_division = '이벤트')
+				, #{item}
+			)
+			
+		]]>
+	</insert>
+	
+	
+	</mapper>

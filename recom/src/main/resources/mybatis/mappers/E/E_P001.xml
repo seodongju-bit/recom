@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="E.P001">
+
+	
+	<resultMap id="E_P001Result01" type="E_P001VO">
+	  <result property="od_number" column="od_number"/>
+	  <result property="orderdetail_seq" column="orderdetail_seq"/>
+	  <result property="order_number" column="order_number"/>
+	  <result property="order_seq_num" column="order_seq_num"/>
+	  
+	  
+	  <result property="mem_id" column="mem_id"/>
+	  <result property="sell_number" column="sell_number"/>
+	  <result property="sell_title" column="sell_title"/>
+	  <result property="order_size" column="od_size"/>
+	  <result property="order_color" column="od_color"/>
+	  <result property="detail_quantity" column="od_quantity"/>
+	  <result property="pro_price" column="pro_price"/>
+	  <result property="sell_price" column="sell_price"/>
+	  <result property="seller_id" column="seller_id"/>
+	  <result property="order_total_sale_price" column="order_sale_price"/>
+	  
+	  <result property="final_order_total_pro_price" column="final_order_total_pro_price"/>
+	  <result property="final_order_total_price" column="final_order_total_price"/>
+	  <result property="delivery_method" column="delivery_method"/>
+	  <result property="mem_name" column="mem_name"/>
+	  <result property="mem_email1" column="mem_email1"/>
+	  <result property="mem_email2" column="mem_email2"/>
+	  <result property="order_zip" column="order_zip"/>
+	  <result property="order_address1" column="order_address1"/>
+	  <result property="order_address2" column="order_address2"/>
+	  <result property="order_request" column="order_request"/>
+	  <result property="pay_method" column="pay_method"/>
+	  <result property="order_pointuse" column="order_pointuse"/>
+	  <result property="co_number" column="co_number"/>
+	  <result property="choice_review" column="choice_review"/>
+	  <result property="delivery_price" column="delivery_price"/>
+	  <result property="total_delivery_price" column="total_delivery_price"/>
+	  
+	  <result property="od_quantity" column="od_qunatity"/>
+	  <result property="od_size" column="od_size"/>
+	  <result property="od_color" column="od_color"/>
+	  <result property="deli_number" column="deli_number"/>
+	  <result property="deli_name" column="deli_name"/>
+	  <result property="od_state" column="od_state"/>
+	  
+	  <result property="point_save" column="point_save"/>
+	  <result property="point_save_total" column="point_save"/>
+	</resultMap>
+	
+	<resultMap id="E_P001Result02" type="activeVO">
+		<result property="co_number" column="co_number" />
+        <result property="co_name" column="co_name" />
+        <result property="co_enddate" column="co_enddate" />
+        <result property="co_stdate" column="co_stdate" />
+        <result property="co_percent" column="co_percent" />
+        <result property="mem_id" column="mem_id" />
+	</resultMap> 
+	
+	<select id="selectMyOrderList" resultMap="E_P001Result01" parameterType="E_P001VO">
+		<![CDATA[
+			select *
+			from orders
+			where to_char(order_date, 'yyyy-mm-dd')=to_char(sysdate, 'yyyy-mm-dd')
+			and mem_id = ${mem_id}
+			order by order_date desc
+		]]>
+	</select>
+	<select id="searchItem" resultMap="E_P001Result01" parameterType="java.util.Map"> 
+      	<![CDATA[
+         	select *
+         	from productsell p1, product p2
+         	where p1.pro_number = p2.pro_number 
+         	and sell_number = ${p_id}
+      	]]>
+	</select>
+	
+	<insert id="insertNewOrder" parameterType="E_P001VO">
+		<selectKey resultType="int" keyProperty="order_seq_num" order="BEFORE">
+	    	select order_seq_num.nextval from dual
+	    </selectKey>
+		<![CDATA[
+			insert into orders(
+								order_seq_num,
+								order_number,
+								final_order_total_pro_price,
+								order_total_sale_price,
+								co_number,
+								order_pointuse,
+								final_order_total_price,
+								delivery_method,
+								total_delivery_price,
+								pay_method,
+								mem_id,
+								mem_name,
+								mem_tel,
+								mem_email1,
+								mem_email2,
+								order_zip,
+								order_address1,
+								order_address2,
+								order_request,
+								point_save_total,
+								order_date
+								)
+							
+						values(
+							   #{order_seq_num, jdbcType=NUMERIC},
+							   #{order_number, jdbcType=VARCHAR},
+							   #{final_order_total_pro_price, jdbcType=VARCHAR},
+							   #{order_total_sale_price, jdbcType=VARCHAR},
+							   #{co_number, jdbcType=VARCHAR},
+							   #{order_pointuse, jdbcType=VARCHAR},
+							   #{final_order_total_price, jdbcType=VARCHAR},
+							   #{delivery_method, jdbcType=VARCHAR},
+							   #{total_delivery_price, jdbcType=VARCHAR},
+							   #{pay_method, jdbcType=VARCHAR},
+							   #{mem_id, jdbcType=VARCHAR},
+							   #{mem_name, jdbcType=VARCHAR},
+							   #{mem_tel, jdbcType=VARCHAR},
+							   #{mem_email1, jdbcType=VARCHAR},
+							   #{mem_email2, jdbcType=VARCHAR},
+							   #{order_zip, jdbcType=VARCHAR},
+							   #{order_address1, jdbcType=VARCHAR},
+							   #{order_address2, jdbcType=VARCHAR},
+							   #{order_request, jdbcType=VARCHAR},
+							   #{point_save_total, jdbcType=NUMERIC},
+							   sysdate
+							   )
+		]]>	
+	</insert>
+	<insert id="insertNewOrderDetail" parameterType="E_P001VO">
+		<selectKey resultType="int" keyProperty="orderdetail_seq" order="BEFORE">
+			select orderdetail_seq.nextval
+			from dual
+		</selectKey>
+		<![CDATA[
+			insert into orderdetail(
+							  sell_number,
+							  order_number,
+							  od_quantity,
+							  od_size,
+							  od_color,
+							  delivery_price,
+							  delivery_payment,
+							  od_state,
+							  od_number,
+							  choice_review
+							  )
+						values(
+						      #{sell_number, jdbcType=VARCHAR},
+							  #{order_number, jdbcType=VARCHAR},
+							  #{detail_quantity, jdbcType=NUMERIC},
+							  #{order_size, jdbcType=VARCHAR},
+							  #{order_color, jdbcType=VARCHAR},
+							  #{delivery_price, jdbcType=VARCHAR},
+							  #{delivery_payment, jdbcType=VARCHAR},
+							  #{od_state, jdbcType=VARCHAR},
+							  #{od_number, jdbcType=VARCHAR},
+							  #{choice_review, jdbcType=VARCHAR}
+							)
+		]]>
+	</insert>
+	<select id="selectOrderDetailNumber" resultType="int">
+		<![CDATA[
+		select seq_od_number.nextval from dual
+		]]>	
+	</select>
+	<select id="selectOrderNumber" resultType="int">
+		<![CDATA[
+		select seq_order_number.nextval from dual
+		]]>
+	</select>
+	<select id="couponList" resultMap="E_P001Result02">
+      <![CDATA[
+         select 
+         mc.co_number, 
+         c.co_name, 
+         to_char(c.co_enddate,'YYYY-MM-DD') co_enddate, 
+         to_char(c.co_stdate,'YYYY-MM-DD') co_stdate,
+         c.co_percent
+		 from coupon c, mycoupon mc
+		 where c.co_number = mc.co_number
+		 and mem_id = #{p_id}	
+		 and co_check = 'N'
+      ]]>
+	</select>
+	<update id="saveMemPoint" parameterType="E_P001VO">
+		<![CDATA[
+		update members
+		set mem_point = mem_point + #{point_save_total} - #{order_pointuse}
+		where mem_id = #{mem_id}
+		]]>
+	</update>
+	<insert id="point_use" parameterType="E_P001VO">
+	   <![CDATA[
+	   insert into pointuse(
+	   						point_number,
+	   						point_usedate,
+	   						point_usemoney,
+	   						point_content,
+	   						mem_id
+	   						)
+	   				values( 
+	   						(select NVL(max(point_number), 0)+1 from pointuse where mem_id = #{mem_id} ),
+	   						sysdate,
+	   						#{order_pointuse},
+	   						'사용',
+	   						#{mem_id}
+	   					  )
+	   ]]>  
+	</insert>
+	<insert id="point_add" parameterType="E_P001VO">
+	   <![CDATA[  
+	   insert into pointuse(
+	   						point_number,
+	   						point_date,
+	   						point_usemoney, 
+	   						point_content,
+	   						mem_id
+	   						)
+	   				values(
+	   						(select NVL(max(point_number), 0)+1 from pointuse where mem_id = #{mem_id} ),
+	   						sysdate,
+	   						trunc(#{point_save_total}),
+	   						'적립',
+	   						#{mem_id}
+	   					  )  
+	   ]]>
+	</insert>
+	<update id="useCoupon" parameterType="activeVO">
+	  	<![CDATA[
+	  	update mycoupon
+	  	set co_check = 'Y',
+	  		co_usedate = sysdate
+	    where co_number = #{co_number}
+	    ]]>
+	</update>
+</mapper>

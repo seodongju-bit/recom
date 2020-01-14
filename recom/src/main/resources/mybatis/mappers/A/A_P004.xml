@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="mapper.active">
+	<resultMap id="couResult" type="activeVO">
+		<result property="co_number" column="co_number" />
+        <result property="co_name" column="co_name" />
+        <result property="co_enddate" column="co_enddate" />
+        <result property="co_stdate" column="co_stdate" />
+        <result property="co_percent" column="co_percent" />
+        <result property="co_usedate" column="co_usedate" />
+        <result property="co_check" column="co_check" />
+        <result property="mem_id" column="mem_id" />
+	</resultMap> 
+	
+	<resultMap id="pointResult" type="activeVO">
+		<result property="mem_no" column="mem_no" />
+        <result property="point_number" column="point_number" />
+        <result property="point_date" column="point_date" />
+        <result property="point_usedate" column="point_usedate" />
+        <result property="point_usemoney" column="point_usemoney" />
+        <result property="order_number" column="order_number" />
+        <result property="point_content" column="point_content" />
+        <result property="mem_id" column="mem_id" />
+	</resultMap> 
+	
+	<resultMap id="orderListResult" type="java.util.Map">
+		<result property="mem_id" column="mem_id" />
+	</resultMap> 
+	
+	<select id="selectAllCouponList" resultMap="couResult">
+      <![CDATA[
+         select 
+         mc.co_number, 
+         c.co_name, 
+         to_char(c.co_enddate,'YYYY-MM-DD') co_enddate, 
+         to_char(c.co_stdate,'YYYY-MM-DD') co_stdate,
+         c.co_percent
+		 from coupon c, mycoupon mc
+		 where c.co_number = mc.co_number
+		 and mem_id = #{p_id}
+		 and co_check = 'N'	
+      ]]>
+	</select>
+	
+	<select id="usecoupon" resultMap="couResult">
+      <![CDATA[
+         select 
+         mc.co_number, 
+         c.co_name, 
+         to_char(mc.co_usedate,'YYYY-MM-DD') co_usedate,
+         c.co_percent
+		 from coupon c, mycoupon mc
+		 where c.co_number = mc.co_number
+		 and mem_id = #{mem_id}
+		 and co_check = 'Y'	
+      ]]>
+	</select>
+	  
+	<select id="selectAllPointlist" resultMap="pointResult" parameterType="java.util.Map">
+      <![CDATA[
+         SELECT * 
+         FROM pointuse
+         WHERE mem_id=#{mem_id}
+         
+       ]]>
+          
+        <choose>
+        	<when test="start != '' and end !='' and date != ''"> 
+        		AND ${date} between to_date('${start}', 'YYYY-MM-DD') 
+       			AND  to_date('${end}', 'YYYY-MM-DD')+0.9999
+       			order by point_number desc
+    		</when>
+		</choose>
+	</select>
+	  
+
+	<select id="orderList" resultMap="orderListResult" parameterType="java.util.Map">
+      <![CDATA[
+         select (DENSE_RANK() OVER(order by order_date DESC, od.order_number DESC)) rownums, o.order_number, od.sell_number, order_date ,sell_price, sell_title, sell_thumbnail, od_state, od_recomreview
+         from orders o, orderdetail od, productsell ps
+         where od.sell_number = ps.sell_number
+         and o.order_number = od.order_number
+         and o.mem_id = #{mem_id}
+      ]]>
+	</select>
+	
+	<select id="orderList2" resultMap="orderListResult" parameterType="java.util.Map">
+      <![CDATA[
+         select (DENSE_RANK() OVER(order by order_date DESC, od.order_number DESC)) rownums, o.order_number,od.sell_number, order_date ,sell_price, sell_title, sell_thumbnail, od_state, od.choice_review, NVL(review_number, 0) review_number
+         from orders o, orderdetail od, productsell ps, review r
+         where od.sell_number = ps.sell_number
+         and o.order_number = od.order_number
+         and o.order_number = r.order_number(+)
+         and o.mem_id = #{mem_id} 
+      ]]>
+	</select>
+	  
+	
+	
+	<select id="orderList3" resultMap="orderListResult" parameterType="java.util.Map">
+      <![CDATA[
+         select p.sell_thumbnail, p.sell_title, b.sell_number
+         from basket2 b, productsell p
+         where b.sell_number = p.sell_number
+         and b.mem_id =  #{mem_id}
+         and rownum <3
+      ]]>
+	</select>
+	
+	<select id="quList" resultMap="orderListResult" parameterType="java.util.Map">
+      <![CDATA[
+         select MEM_ID, QU_CONTENTS, QU_NUMBER, QU_ANSWER,  to_char(qu_date, 'YYYY-MM-DD') QU_DATE, ORDER_NUMBER, SELL_NUMBER, SELL_TITLE
+         from QUESTIONS
+         where mem_id = #{mem_id}
+         
+      ]]>
+	</select>
+ 	
+	<insert id="takecoupon"  parameterType="java.util.Map"> 
+  <![CDATA[
+    	 INSERT INTO mycoupon (co_number, mem_id) 
+     	 VALUES (#{co_number}, #{mem_id})            
+   ]]>      
+  </insert>
+  
+  
+  <select id="givecoupon" resultMap="couResult">
+      <![CDATA[
+         select 
+         co_number, 
+         co_name, 
+         to_char(co_enddate,'YYYY-MM-DD') co_enddate, 
+         to_char(co_stdate,'YYYY-MM-DD') co_stdate,
+         co_percent
+		 from coupon 
+		 order by co_stdate desc
+      ]]>
+	</select>
+	
+	<select id="countcoupon" parameterType="String" resultType="Integer">
+	<![CDATA[
+      SELECT COUNT(*) FROM mycoupon
+      WHERE
+          co_number = #{co_number} 
+          and
+          mem_id = #{mem_id}
+           ]]> 
+</select>
+
+<select id="coulist" parameterType="String" resultType="Integer">
+	<![CDATA[
+      SELECT COUNT(*) FROM mycoupon
+      WHERE
+          mem_id = #{mem_id} 
+          and co_check = 'N'
+           ]]> 
+</select>
+
+<select id="baslist" parameterType="String" resultType="Integer">
+	<![CDATA[
+      SELECT COUNT(*) FROM basket2
+      WHERE
+          mem_id = #{mem_id} 
+           ]]> 
+</select>
+
+<select id="mempoint" parameterType="String" resultType="Integer">
+	<![CDATA[
+      select mem_point
+         from members 
+         where mem_id = #{mem_id}
+           ]]> 
+</select>
+
+<select id="delcount" parameterType="String" resultType="Integer">
+	<![CDATA[
+     select count(od_state)
+         from orders o, orderdetail od
+         where o.order_number = od.order_number
+         and mem_id = #{mem_id}
+         and od.od_state = 'F_0003'
+           ]]> 
+</select>
+
+
+<select id="question" parameterType="String" resultType="Integer">
+	<![CDATA[
+     SELECT COUNT(*) FROM questions
+      WHERE
+          mem_id = #{mem_id} 
+           ]]> 
+</select>
+
+<select id="listquestion" resultMap="orderListResult" parameterType="java.util.Map">
+      <![CDATA[
+         select MEM_ID, QU_CONTENTS, QU_NUMBER, QU_ANSWER,  to_char(qu_date, 'YYYY-MM-DD') QU_DATE, ORDER_NUMBER, SELL_THUMBNAIL, SELL_NUMBER, SELL_TITLE
+         from QUESTIONS
+         where mem_id = #{mem_id}
+         and qu_number = #{qu_number}
+      ]]>
+	</select>
+
+<select id="alert" resultMap="orderListResult" parameterType="java.util.Map">
+	<![CDATA[
+    select MEM_ID, de_number, de_division, de_contents,  to_char(de_date, 'YYYY-MM-DD') DE_DATE
+         from declarations
+         where mem_id = #{mem_id}
+           ]]> 
+</select>
+
+	<select id="pointSearch" parameterType="String" resultType="Integer">
+	<![CDATA[
+     	 select MEM_POINT
+         from members
+         where mem_id = #{mem_id}
+    ]]> 
+	</select>
+
+	<select id="passCheck" parameterType="String" resultType="String">
+	<![CDATA[
+     	 select MEM_PW
+         from members
+         where mem_id = #{mem_id}
+    ]]> 
+	</select>
+
+	<insert id="withdrawSave"  parameterType="java.util.Map">
+  <![CDATA[
+    	 INSERT INTO withdraw (wd_number, mem_id, wd_price, wd_date, wd_bank, wd_account, wd_name, wd_state) 
+         VALUES (
+      	(select NVL(max(wd_number), 0)+1 from withdraw where mem_id = #{mem_id} ),
+      	#{mem_id}, #{wd_price}, sysdate, #{wd_bank}, #{wd_account}, #{wd_name}, '입급신청' )
+   ]]>      
+  </insert>
+  
+	<update id="pointDeduction" parameterType="java.util.Map">
+	<![CDATA[
+		update members
+		set  mem_point = #{mem_point} - #{wd_price}
+		where mem_id = #{mem_id}
+	]]>
+	</update>
+	
+	<insert id="pointUseRecord" parameterType="java.util.Map">
+	<![CDATA[
+		INSERT INTO pointuse (POINT_NUMBER, mem_id, point_usedate, point_usemoney, POINT_CONTENT) 
+         VALUES (
+      	(select NVL(max(point_number), 0)+1 from pointuse where mem_id = #{mem_id} ),
+      	#{mem_id}, sysdate, #{wd_price}, '출금' )
+	]]>
+	</insert>
+
+	<update id="confirm" parameterType="java.util.Map">
+	<![CDATA[
+		update orderdetail
+		set od_state = 'F_0005'
+		where order_number = #{order_number}
+		and sell_number = #{sell_number}
+	]]>
+	</update>
+	
+	<select id="reviewerId" parameterType="java.util.Map" resultType="String">
+	<![CDATA[
+      SELECT mem_id
+      from review
+      where review_number = #{choice_review}
+    ]]> 
+	</select>
+
+	<update id="reviewerGive" parameterType="java.util.Map">
+	<![CDATA[
+		update members
+		set mem_point = mem_point + #{sell_price}* 0.01,
+		MEM_MONTHRC = MEM_MONTHRC + 1,
+		MEM_TOTALRC = MEM_TOTALRC + 1
+		where mem_id = #{ReviewerId}
+	]]> 
+	</update>
+	   
+	 <update id="giveReviewPoint" parameterType="java.util.Map">
+	<![CDATA[
+		update review
+		set REVIEW_MONTHPOINT = REVIEW_MONTHPOINT + 1,
+		REVIEW_TOTALPOINT = REVIEW_TOTALPOINT + 1
+		where review_number = #{choice_review}
+	]]> 
+	</update>
+	  
+  	<insert id="reviewerGiveSave" parameterType="java.util.Map">
+	<![CDATA[
+		INSERT INTO pointuse (POINT_NUMBER, mem_id, point_date, point_usemoney, POINT_CONTENT) 
+         VALUES (
+      	(select NVL(max(point_number), 0)+1 from pointuse where mem_id = #{ReviewerId} ),
+      	#{ReviewerId}, sysdate, #{sell_price}*0.01 , '리뷰포인트 적립' )
+	]]>
+	</insert>
+  	  
+	<update id="giveMe" parameterType="java.util.Map">
+	<![CDATA[
+		update members
+		set mem_point = mem_point + 10
+		where mem_id = #{mem_id}
+	]]>
+	</update>
+	 
+	<insert id="giveMeSave" parameterType="java.util.Map">
+	<![CDATA[
+		INSERT INTO pointuse (POINT_NUMBER, mem_id, point_date, point_usemoney, POINT_CONTENT)
+         VALUES (
+      	(select NVL(max(point_number), 0)+1 from pointuse where mem_id = #{mem_id} ),
+      	#{mem_id}, sysdate, 10 , '리뷰선정 보너스' )
+	]]>
+	</insert>
+
+<select id="confirmcheck" parameterType="String" resultType="Integer">
+	<![CDATA[
+      SELECT COUNT(*) FROM orderdetail
+      where order_number = #{order_number}
+		and sell_number = #{sell_number}
+		and od_state = 'F_0005'
+           ]]> 
+</select>
+
+<update id="cancle" parameterType="java.util.Map">
+	<![CDATA[
+		update orderdetail
+		set od_state = 'F_0006'
+		where order_number = #{order_number}
+		and sell_number = #{sell_number}
+	]]>
+	</update>
+
+<select id="canclecheck" parameterType="String" resultType="Integer">
+	<![CDATA[
+      SELECT COUNT(*) FROM orderdetail
+      where order_number = #{order_number}
+		and sell_number = #{sell_number}
+		and od_state = 'F_0006'
+           ]]> 
+</select>
+
+</mapper>
+

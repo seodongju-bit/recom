@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="mapper.makecoupon">
+	<resultMap id="mkcouResult" type="makecouponVO">
+		<result property="co_number" column="co_number" />
+        <result property="co_name" column="co_name" />
+        <result property="co_enddate" column="co_enddate" />
+        <result property="co_stdate" column="co_stdate" />
+        <result property="co_percent" column="co_percent" />
+        
+	</resultMap> 
+	
+	 
+	<insert id="make"  parameterType="makecouponVO">
+  <![CDATA[
+    	 INSERT INTO coupon (co_number, co_name, co_enddate, co_stdate, co_percent) 
+      VALUES (#{co_number}, #{co_name}, #{co_enddate},#{co_stdate}, #{co_percent})            
+   ]]>      
+  </insert>
+	
+	<select id="listcoupon" resultMap="mkcouResult">
+      <![CDATA[
+         select * from coupon 
+      ]]>
+	</select>
+	
+	<update id="updateData" parameterType="java.util.Map">
+		update coupon
+		set co_name = #{co_name},
+			co_stdate = #{co_stdate},
+			co_enddate = #{co_enddate},
+			co_percent = #{co_percent}
+		where co_number = #{co_number}
+	</update>	
+	
+	<delete id="deleteData" parameterType="java.util.Map">
+		delete coupon
+		where co_number = #{co_number}
+	</delete>
+	
+	</mapper>

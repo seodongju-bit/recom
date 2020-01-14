@@ -1,0 +1,115 @@
+@font-face {
+   src: url("../recom/resources/font/NanumSquare_acR.ttf");
+   font-family: "NanumSquare";
+}
+
+#main, #subBtn, #file, #notice, #division, #choice{
+font-family:"NanumSquare";
+font-weight: 700;
+}
+
+#info{
+min-height: 1200px;
+}
+
+#meminfo{
+ max-width: 1600px;
+  margin: 10px 20px 20px 10px;
+  padding: 10px 20px;
+  background: #f4f7f8;
+  border-radius: 8px;
+}
+
+h1{
+text-align:left;
+font-size: 30px;
+font-weight:bold;
+}
+
+
+form {
+  
+}
+
+
+#f {
+	text-align: left;
+	margin: 0px;
+	padding: 0px;
+}
+
+#b {
+	color: black;
+	/* veritcal-align: middle;
+text-align:center; */
+}
+
+#c {
+	text-align: center;
+}
+
+#caution-box {
+	border: 1px solid #bcbcbc;
+	margin: 20px;
+	width: 80%;
+	margin-left: 140px;
+	margin-right: 0px;
+}
+
+#box {
+	padding: 20px;
+}
+
+#z {
+	text-align: center;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	/* padding-left: 250px; */
+}
+
+#r {
+	text-align: right;
+	font-size: 13px;
+}
+
+check {
+	background-color: #f3f3f3;
+}
+
+#side {
+	position: fixed;
+	right: 35px;
+	top: 280px;
+	
+}
+
+td
+
+{
+padding:0px 0px 0px 0px;
+}
+
+
+
+#side-tb {
+	padding: 8px;
+	line-height: 1.42857143;
+	border-bottom: 1px solid #ddd;
+	/*border-top: 1px solid #ddd;*/
+}
+
+.zipbox{
+	width: 10%;
+}
+
+
+.addressbox1,	
+.addressbox2{
+	width: 30%;
+}
+
+.meminfotitle{
+font-weight: bold;
+font-size: large;
+}

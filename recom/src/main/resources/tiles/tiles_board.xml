@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+  <definition name="baseLayout"  template="/WEB-INF/views/common/mp_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />   
+      <put-attribute name="side" value="/WEB-INF/views/common/mp_side.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>             
+       
+     <definition name="noticeLayout"  template="/WEB-INF/views/common/notice_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/common/notice_side.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>   
+  
+                     
+   <definition name="baseLayout2"  template="/WEB-INF/views/common/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/common/side2.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>                
+            
+	<definition name="baseLayout3"  template="/WEB-INF/views/common/layout2.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition> 
+	
+	  <definition name="baseLayout4"  template="/WEB-INF/views/common/layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="side" value="/WEB-INF/views/common/mp_side.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="mainBody" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+	
+	
+	 <definition name="itemLayout"  template="/WEB-INF/views/common/item_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="bodyDetail" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+   
+   <definition name="baseLayout_cart"  template="/WEB-INF/views/common/main_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/mp_footer.jsp" />
+   </definition>
+   
+    <definition name="eventLayout"  template="/WEB-INF/views/common/main_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="bodyDetail" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+   
+	<definition name="emptyLayout" template="/WEB-INF/views/common/layout2.jsp" >
+		<put-attribute name="title" value=""/>
+		<put-attribute name="body" value=""/>
+		<put-attribute name="footer" value=""/>
+	</definition>
+   <!-- 레이아웃 페이지 구분 -->
+   
+   <definition name="signinpage" extends="baseLayout3">
+      <put-attribute name="title" value="로그인창" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P001/D001.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+   
+   <definition name="searchidpage" extends="baseLayout3">
+      <put-attribute name="title" value="아이디찾기페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P001/D002.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+   
+   <definition name="searchpwpage" extends="baseLayout3">
+      <put-attribute name="title" value="비밀번호찾기페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P001/D003.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+   
+    <definition name="memberdivisionpage" extends="baseLayout3">
+      <put-attribute name="title" value="회원가입구분창" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P002/D001.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition> 
+   
+   <definition name="signuppage" extends="baseLayout3">
+      <put-attribute name="title" value="구매자회원가입창" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P002/D002.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition> 
+   
+   <definition name="signuppage2" extends="baseLayout3">
+      <put-attribute name="title" value="판매자회원가입창" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P002/D003.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition> 
+   
+   <definition name="mailsendpage" extends="baseLayout3">
+      <put-attribute name="title" value="메일확인안내창" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P002/D004.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+ 
+   <definition name="unauthorizedmember" extends="baseLayout3">
+      <put-attribute name="title" value="비인증회원로그인시" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P001/D004.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+ 
+  <definition name="secessionmember" extends="baseLayout3">
+      <put-attribute name="title" value="탈퇴신청회원로그인시" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P001/D005.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+   
+   <definition name="signupsuccesspage" extends="baseLayout3">
+      <put-attribute name="title" value="회원가입성공창" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P002/D005.jsp" />
+      <put-attribute name="footer" value="" />
+   </definition>
+
+ 
+ 	<definition name="memberpwcheckpage" extends="baseLayout">
+      <put-attribute name="title" value="마이페이지비밀번호체크" />
+      <put-attribute name="side" value="" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P003/D003.jsp" />
+   </definition>
+ 
+ 	<definition name="memberupdatepage" extends="baseLayout">
+      <put-attribute name="title" value="회원정보수정" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P003/D001.jsp" />
+   </definition>
+   
+   <definition name="membersecessionpage" extends="baseLayout">
+      <put-attribute name="title" value="회원탈퇴페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P003/D002.jsp" />
+   </definition>
+   
+   
+   <definition name="Secessionsuccesspage" extends="baseLayout3">
+      <put-attribute name="title" value="회원탈퇴성공페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P003/D004.jsp" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+   
+
+	<definition name="myPage" extends="baseLayout">
+      <put-attribute name="title" value="마이페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D001.jsp" />
+   </definition>
+   
+   <definition name="myPagePlus" extends="emptyLayout">
+      <put-attribute name="title" value="마이페이지plus" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D001.jsp" />
+   </definition>
+   
+   <definition name="event" extends="eventLayout">
+      <put-attribute name="title" value="이벤트/공지사항" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P001/D001.jsp" />
+   </definition>
+   
+   <definition name="chatInit" extends="eventLayout">
+      <put-attribute name="title" value="채팅" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P006/D001_chat.jsp" />
+   </definition>
+   
+   <definition name="eventDetail" extends="eventLayout">
+      <put-attribute name="title" value="이벤트/공지사항-상세" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P001/D002.jsp" />
+   </definition>
+   
+   <definition name="coupon" extends="baseLayout">
+      <put-attribute name="title" value="쿠폰조회" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D005.jsp" />
+   </definition>
+   
+   <definition name="usecoupon" extends="baseLayout">
+      <put-attribute name="title" value="사용쿠폰조회" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D006.jsp" />
+   </definition>
+   
+   <definition name="givecoupon" extends="baseLayout">
+      <put-attribute name="title" value="쿠폰발급" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D008.jsp" />
+   </definition>
+   
+   <definition name="makecoupon" extends="adminLayout">
+      <put-attribute name="title" value="쿠폰생성" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P007/D001.jsp" />
+   </definition>
+   
+   <definition name="point" extends="baseLayout">
+      <put-attribute name="title" value="포인트사용내역" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D003.jsp" />
+   </definition>
+   
+   <definition name="alert" extends="baseLayout">
+      <put-attribute name="title" value="포인트사용내역" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P004/D007.jsp" />
+   </definition>
+   
+   <definition name="eventWrite" extends="eventLayout">
+      <put-attribute name="title" value="이벤트/공지사항-상세" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P001/D003.jsp" />
+   </definition>
+   
+   <definition name="itemManager" extends="sellerLayout">
+      <put-attribute name="title" value="상품관리페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/B/P001/D001.jsp" />
+       <put-attribute name="footer" value="" />
+   </definition> 
+   
+   <definition name="searchOrder" extends="emptyLayout">
+      <put-attribute name="title" value="상품관리페이지2" />
+      <put-attribute name="body" value="/WEB-INF/views/B/P001/D003.jsp" />
+   </definition> 
+   
+    <definition name="basket" extends="eventLayout">
+      <put-attribute name="title" value="장바구니" />
+      <put-attribute name="body" value="/WEB-INF/views/A/P005/D001.jsp" />
+<!--       <put-attribute name="body" value="/WEB-INF/views/A/P005/D001.jsp" /> -->
+   </definition>
+   
+   <definition name="reviewwrite" extends="baseLayout3">
+      <put-attribute name="title" value="리뷰작성" />
+      <put-attribute name="body" value="/WEB-INF/views/D/P001/reviewEnrollment.jsp" />
+   </definition>
+   
+   	<definition name="myReview" extends="baseLayout">
+      <put-attribute name="title" value="내 리뷰 확인" />
+      <put-attribute name="body" value="/WEB-INF/views/D/P001/D002.jsp" />
+   </definition>
+   
+   <definition name="myReview2" extends="baseLayout">
+      <put-attribute name="title" value="내 리뷰 확인" />
+      <put-attribute name="body" value="/WEB-INF/views/D/P001/D003.jsp" />
+   </definition>
+   
+   
+   	<definition name="order" extends="itemLayout">
+      <put-attribute name="title" value="주문정보입력" />
+      <put-attribute name="body" value="/WEB-INF/views/E/P001/D001.jsp" />
+   </definition>
+   
+    <definition name="payToOrder" extends="itemLayout">
+   	  <put-attribute name="title" value="주문정보확인"/>
+   	  <put-attribute name="body" value="/WEB-INF/views/E/P001/D003.jsp"/>
+   </definition>
+
+	<definition name="reviewRankingMenu" extends="itemLayout">
+      <put-attribute name="title" value="리뷰랭킹 메뉴" />  
+      <put-attribute name="body" value="/WEB-INF/views/F/P002/reviewMenu.jsp" /> 
+      <put-attribute name="bodyDetail" value="" />
+   </definition>
+   
+   <definition name="reviewProfile" extends="itemLayout">
+      <put-attribute name="title" value="리뷰랭킹 메뉴" />  
+      <put-attribute name="body" value="/WEB-INF/views/A/P010/reviewProfile.jsp" /> 
+      <put-attribute name="bodyDetail" value="" />
+   </definition>
+
+	<definition name="reviewProfile2" extends="baseLayout">
+      <put-attribute name="title" value="나의리뷰프로필" />  
+      <put-attribute name="body" value="/WEB-INF/views/A/P010/reviewProfile2.jsp" /> 
+   </definition>
+
+	<definition name="reviewRanking" extends="emptyLayout">
+      <put-attribute name="title" value="리뷰랭킹 페이지" />  
+      <put-attribute name="body" value="/WEB-INF/views/F/P002/reviewRanking.jsp" />
+   </definition>
+   
+   <definition name="bestReviewPlusMenu" extends="itemLayout">
+      <put-attribute name="title" value="베스트리뷰 전체순위 메뉴" />  
+      <put-attribute name="body" value="/WEB-INF/views/F/P002/reviewMenu2.jsp" /> 
+      <put-attribute name="bodyDetail" value="" />
+   </definition>
+   
+   <definition name="bestReviewPlus" extends="emptyLayout">
+      <put-attribute name="title" value="베스트리뷰 전체순위" />  
+      <put-attribute name="body" value="/WEB-INF/views/F/P002/bestReviewPlus.jsp" />
+   </definition>
+
+	<definition name="memberReview" extends="baseLayout4">
+      <put-attribute name="title" value="회원별 리뷰 조회 페이지" />         
+      <put-attribute name="body" value="/WEB-INF/views/F/P001/D002.jsp" />                            
+   </definition>
+   
+   
+	<definition name="bestMenu" extends="itemLayout">
+      <put-attribute name="title" value="베스트상품 메뉴" />  
+      <put-attribute name="body" value="/WEB-INF/views/F/P001/bestMenu.jsp" /> 
+      <put-attribute name="bodyDetail" value="" />
+   </definition>
+   
+	<definition name="bestProduct" extends="emptyLayout">
+      <put-attribute name="title" value="카테고리별 베스트상품분류" />         
+      <put-attribute name="body" value="/WEB-INF/views/F/P001/bestSell.jsp" />
+   </definition>
+
+	<definition name="eventProduct" extends="eventLayout">
+      <put-attribute name="title" value="이벤트상품출력페이지" />         
+      <put-attribute name="body" value="/WEB-INF/views/F/P001/D004.jsp" />
+   </definition>
+   
+   <definition name="eventSell" extends="eventLayout">
+      <put-attribute name="title" value="이벤트상품리스트" />         
+      <put-attribute name="body" value="/WEB-INF/views/F/P001/eventSell.jsp" />
+   </definition>
+	 
+   <definition name="category" extends="baseLayout2">
+      <put-attribute name="title" value="카테고리별 상품창" />         
+      <put-attribute name="body" value="/WEB-INF/views/F/P001/category.jsp" />
+   </definition>
+
+   <definition name="sellItems" extends="itemLayout">
+      <put-attribute name="title" value="상품페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/F/P002/D001.jsp" />
+   </definition> 
+   
+   
+   
+   <definition name="sellItemsReview" extends="emptyLayout">
+      <put-attribute name="title" value="상품상세리뷰" />
+      <put-attribute name="body" value="/WEB-INF/views/F/P002/D003.jsp" />
+   </definition> 
+   
+	<definition name="itemsInfoLoad" extends="emptyLayout">
+		<put-attribute name="title" value="상품상세내용"/>
+		<put-attribute name="body" value="/WEB-INF/views/F/P002/D002.jsp"/>
+	</definition>
+
+	<definition name="exchangeInfo" extends="emptyLayout">
+		<put-attribute name="title" value="반품교환정보"/>
+		<put-attribute name="body" value="/WEB-INF/views/F/P002/D004.jsp"/>
+	</definition>
+	
+	<definition name="proOpinion" extends="emptyLayout">
+		<put-attribute name="title" value="상품의견"/>
+		<put-attribute name="body" value="/WEB-INF/views/F/P002/D005.jsp"/>
+	</definition>
+	
+	<definition name="sellerChat" extends="emptyLayout">   
+		<put-attribute name="title" value="판매자와채팅"/>
+		<put-attribute name="body" value="/WEB-INF/views/A/P006/D002_chat.jsp"/>
+	</definition>
+
+    <definition name="notice" extends="noticeLayout">
+      <put-attribute name="title" value="공지사항페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D001.jsp" />
+   </definition> 
+
+
+   <definition name="noticeDetail" extends="noticeLayout">
+      <put-attribute name="title" value="공지사항상세페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D001_1.jsp" />
+   </definition> 
+   
+    <definition name="noticeDetail2" extends="noticeLayout">
+      <put-attribute name="title" value="문의사항상세페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D001_2.jsp" />
+   </definition> 
+   
+   
+      <definition name="questions" extends="noticeLayout">
+      <put-attribute name="title" value="문의사항전체페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D003_1.jsp" />
+   </definition> 
+   
+    <definition name="questions1" extends="noticeLayout">
+      <put-attribute name="title" value="신고사항전체페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D003_2.jsp" />
+   </definition> 
+   
+   <definition name="questionDetail" extends="noticeLayout">
+      <put-attribute name="title" value="신고사항상세페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D003_3.jsp" />
+   </definition>
+   
+   <definition name="questionDetail1" extends="noticeLayout">
+      <put-attribute name="title" value="문의사항상세페이지" /> 
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D003_4.jsp" />
+   </definition> 
+               
+   <definition name="questionwrite" extends="noticeLayout">
+      <put-attribute name="title" value="문의사항작성페이지" /> 
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D004.jsp" />
+   </definition> 
+   
+   <definition name="questionwrite3" extends="noticeLayout">
+      <put-attribute name="title" value="신고사항작성페이지" /> 
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D005.jsp" />
+   </definition>
+   
+   
+     <definition name="question" extends="noticeLayout">
+      <put-attribute name="title" value="신고사항작성페이지" /> 
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D009.jsp" />
+   </definition>
+   
+   
+    <definition name="questionwrite5" extends="noticeLayout">
+      <put-attribute name="title" value="문의사항답변페이지" /> 
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D006.jsp" />
+   </definition>
+   
+    <definition name="questions2" extends="noticeLayout">
+      <put-attribute name="title" value="자주묻는질문" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D007.jsp" />
+   </definition> 
+   
+      <definition name="questionDetail2" extends="noticeLayout">
+      <put-attribute name="title" value="자주묻는질문상세페이지" />
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D007_1.jsp" />
+   </definition>
+   
+   <definition name="adminLayout"  template="/WEB-INF/views/common/admin_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/admin/header_admin.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="bodyDetail" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>    
+   
+   <definition name="sellerLayout"  template="/WEB-INF/views/common/admin_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="/WEB-INF/views/seller/header_seller.jsp" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="bodyDetail" value="" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+   
+   <definition name="adminPage" extends="adminLayout">
+      <put-attribute name="title" value="관리메뉴"/>
+      <put-attribute name="body" value="/WEB-INF/views/admin/main.jsp"/>
+   </definition>
+   
+   <definition name="memberManager" extends="adminLayout">
+      <put-attribute name="title" value="회원관리페이지"/>
+      <put-attribute name="body" value="/WEB-INF/views/A/P008/D001.jsp"/>
+   </definition>
+   
+   <definition name="declarationsManager" extends="adminLayout">
+      <put-attribute name="title" value="신고회원관리페이지"/>
+      <put-attribute name="body" value="/WEB-INF/views/A/P009/D001.jsp"/>
+   </definition>
+   
+   
+   <definition name="questionresponse" extends="noticeLayout">
+      <put-attribute name="title" value="문의사항답변페이지" /> 
+      <put-attribute name="body" value="/WEB-INF/views/C/P003/D008.jsp" />
+   </definition> 
+
+	
+	<definition name="sellerPage" extends="sellerLayout">
+      <put-attribute name="title" value="주문관리"/>
+      <put-attribute name="body" value="/WEB-INF/views/seller/sellerManagement.jsp"/>
+   </definition>
+   
+   <definition name="orderRequestList" extends="sellerLayout">
+      <put-attribute name="title" value="주문관리"/>
+      <put-attribute name="body" value="/WEB-INF/views/B/P002/D002.jsp"/>
+   </definition>
+   
+   <definition name="useCouponList" template="/WEB-INF/views/common/popup_layout.jsp">
+   	  <put-attribute name="title" value="쿠폰 조회"/>
+   	  <put-attribute name="header" value=""/>
+   	  <put-attribute name="body" value="/WEB-INF/views/E/P001/D004.jsp"/>
+   	  <put-attribute name="footer" value=""/>
+   </definition>
+   
+   <definition name="ordererInfo" template="/WEB-INF/views/common/popup_layout.jsp">
+   	  <put-attribute name="title" value="구매자 정보"/>
+   	  <put-attribute name="header" value=""/>
+   	  <put-attribute name="body" value="/WEB-INF/views/B/P002/D003.jsp"/>
+   	  <put-attribute name="footer" value=""/>
+   </definition>
+
+
+</tiles-definitions>

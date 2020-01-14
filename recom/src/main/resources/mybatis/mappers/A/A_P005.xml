@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="mapper.basket">
+	<resultMap id="basResult" type="basketVO">
+		<result property="mem_id" column="mem_id" />
+		<result property="sell_number" column="sell_number" />
+        <result property="ba_size" column="ba_size" />
+        <result property="ba_color" column="ba_color" />
+        <result property="ba_quantity" column="ba_quantity" />
+        <result property="sell_price" column="sell_price" />
+        <result property="sell_title" column="sell_title" />
+        <result property="sell_thumbnail" column="sell_thumbnail" />
+	</resultMap> 
+	
+	<select id="selectAllBasketList" resultMap="basResult">
+      <![CDATA[
+        select b.sell_number, b.ba_size, b.ba_color, b.ba_quantity, p.sell_price, p.sell_title, p.sell_thumbnail
+		from basket2 b, productsell p
+		where b.sell_number = p.sell_number
+        and b.mem_id = #{mem_id}
+      ]]>
+	</select>
+	
+	<delete id="deleteBasket"  parameterType="java.util.Map">
+	<![CDATA[
+	   DELETE FROM basket2
+           WHERE mem_id = #{mem_id}
+           and sell_number = #{sell_number}
+           and ba_color = #{ba_color}
+           and ba_size = #{ba_size}
+	]]>      
+  </delete>
+  
+	<update id="updateBasket" parameterType="java.util.Map">
+	<![CDATA[
+		update basket2
+		set 
+		    ba_quantity = #{ba_quantity}
+		where sell_number = #{sell_number}
+		and ba_color = #{ba_color}
+           and ba_size = #{ba_size}
+           and mem_id = #{mem_id}
+		]]> 
+	</update>
+	
+	
+	</mapper>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   
+   <mapper namespace="mapper.notice">
+  <resultMap id="C_P003Result01" type="C_P003VO">
+  <result property="de_number" column="de_number" />
+  <result property="mem_id" column="mem_id" />
+  <result property="de_division" column="de_division" />
+  <result property="de_date" column="de_date" />
+  <result property="de_contents" column="de_contents" />
+ 
+  </resultMap>
+
+
+ <resultMap id="C_P003Result02" type="C_P003VO">
+  <result property="qu_number" column="qu_number" />
+  <result property="mem_id" column="mem_id" />
+  <result property="qu_contents" column="qu_contents" />                 
+  <result property="qu_answer" column="qu_answer" />
+  <result property="qu_date" column="qu_date" />
+
+ 
+  </resultMap>
+  
+  
+  
+    <resultMap id="C_P003Result04" type="C_P003VO">
+  <result property="de_number" column="de_number" />
+  <result property="mem_id" column="mem_id" />
+  <result property="de_division" column="de_division" />
+  <result property="de_date" column="de_date" />
+  <result property="de_contents" column="de_contents" />
+ 
+  <result property="order_number" column="order_number" />
+    <result property="sell_number" column="sell_number" />
+      <result property="sell_title" column="sell_title" />
+        <result property="sell_thumbnail" column="sell_thumbnail" />
+        
+ 
+  </resultMap>
+  
+  
+  
+ <resultMap id="C_P003Result03" type="C_P003VO">
+  <result property="oq_number" column="oq_number" />
+  <result property="oq_question" column="oq_question" />
+  <result property="oq_answer" column="oq_answer" />                 
+
+
+ 
+  </resultMap>
+  
+  
+  
+     <select id="noticeItem" resultMap="C_P003Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+       SELECT d.de_number,d.mem_id,d.de_division,d.de_date,d.de_contents
+       FROM declarations d, members m
+       WHERE d.mem_id = m.mem_id AND 
+       ROWNUM<4
+       ORDER BY d.de_number DESC
+      ]]>            
+
+   </select>  
+   
+      <select id="noticeItem2" resultMap="C_P003Result04" parameterType="java.util.Map"> 
+      <![CDATA[
+     SELECT q.qu_number,q.mem_id,q.qu_contents,q.qu_answer,q.qu_date,q.sell_title
+      FROM questions q, members m
+      WHERE q.mem_id = m.mem_id AND
+      ROWNUM<4
+      ORDER BY q.qu_number DESC
+      ]]>         
+
+   </select>   
+   
+
+                          
+   <select id="noticeDetail" parameterType="java.util.Map" resultType="java.util.HashMap"> 
+    <![CDATA[
+        
+   SELECT de_number,mem_id,de_division,de_date,de_contents
+   FROM declarations 
+   WHERE de_number=#{de_number}
+           
+        ]]>         
+ 
+   </select>
+   
+   
+  <select id="noticeDetail2" parameterType="java.util.Map" resultType="java.util.HashMap"> 
+    <![CDATA[
+        
+   SELECT qu_number,qu_contents,qu_answer,mem_id,qu_date,sell_title
+   FROM questions 
+   WHERE qu_number=#{qu_number}
+           
+        ]]>         
+ 
+   </select>
+   
+   
+   
+    <select id="questionDetail" parameterType="java.util.Map" resultType="java.util.HashMap"> 
+    <![CDATA[
+        
+   SELECT de_number,mem_id,de_division,de_date,de_contents
+   FROM declarations 
+   WHERE de_number=#{de_number}
+           
+        ]]>         
+ 
+   </select>
+   
+   
+     <select id="questionDetail1" parameterType="java.util.Map" resultType="java.util.HashMap"> 
+    <![CDATA[
+        
+   SELECT qu_number,qu_contents,qu_answer,mem_id,qu_date,sell_title
+   FROM questions 
+   WHERE qu_number=#{qu_number}
+           
+        ]]>           
+ 
+   </select>
+
+   <select id="countBoard" resultType="int">
+	<![CDATA[
+	SELECT COUNT(*) FROM questions
+	]]>
+	</select>
+	
+	   <select id="countBoard2" resultType="int">
+	<![CDATA[
+	SELECT COUNT(*) FROM declarations 
+	]]>
+	</select>
+  
+  
+  
+  <select id="Allquestions" resultMap="C_P003Result02" >                   
+      <![CDATA[
+        SELECT qu_number,mem_id,qu_contents,qu_answer,qu_date,sell_title
+        FROM (
+        SELECT ROWNUM RN, A.* 
+				FROM (
+				SELECT q.qu_number,q.mem_id,qu_contents,q.qu_answer,q.qu_date,q.sell_title
+                FROM questions q, members m
+                WHERE q.mem_id = m.mem_id
+				ORDER BY q.qu_number DESC
+				)A
+			)
+	    WHERE RN BETWEEN #{start} AND #{end}
+			
+      
+      ]]>         
+
+   </select>   
+  
+  
+  
+    <select id="Allquestions1" resultMap="C_P003Result01" >                   
+      <![CDATA[
+        SELECT de_number,mem_id,de_contents,de_division,de_date
+        FROM (
+        SELECT ROWNUM RN, A.* 
+				FROM (
+				SELECT d.de_number,d.mem_id,d.de_contents,d.de_division,d.de_date
+                FROM declarations d, members m
+                WHERE d.mem_id = m.mem_id
+				ORDER BY d.de_number DESC
+				)A
+			)
+	    WHERE RN BETWEEN #{start} AND #{end}
+			      
+      
+      ]]>         
+
+   </select>   
+        
+<insert id="insertquestion" parameterType="java.util.Map">
+		<![CDATA[
+			insert into questions (qu_number,mem_id, order_number, qu_contents, qu_date,sell_title,sell_thumbnail) 
+			values
+			 (qu_number.nextval,#{mem_id}, #{order_number}, #{qu_contents}, sysdate, #{sell_title},#{sell_thumbnail})   
+		]]>                 
+	</insert>          	
+	   
+     
+  <insert id="insertquestion2" parameterType="java.util.Map">
+		<![CDATA[
+			insert into declarations (de_number,mem_id,de_division,de_date,de_contents) 
+			values
+			 (de_number.nextval,#{mem_id},#{de_division},sysdate,#{de_contents})   
+		]]>     
+	</insert>
+	
+	
+	
+	  <update id="insertquestion3" parameterType="java.util.Map">
+		<![CDATA[
+			UPDATE questions 
+            SET qu_answer =#{qu_answer}
+            WHERE qu_number=#{qu_number} 
+            AND mem_id=#{mem_id}     
+			 
+		]]>     
+	</update>     
+	
+	
+	
+	
+	<select id="Allquestions2" resultMap="C_P003Result03" >                   
+      <![CDATA[
+     SELECT oq_number,oq_question,oq_answer
+        FROM (
+        SELECT ROWNUM RN, A.* 
+				FROM (
+				SELECT oq_number,oq_question,oq_answer
+                FROM oftenquestion o
+				ORDER BY oq_number DESC
+				)A
+			)
+	    WHERE RN BETWEEN #{start} AND #{end}
+			
+         
+      ]]>         
+
+   </select>     
+      
+      
+       
+     <select id="questionDetail2" parameterType="java.util.Map" resultType="java.util.HashMap"> 
+    <![CDATA[
+        
+   SELECT oq_number,oq_question,oq_answer
+   FROM oftenquestion
+   WHERE oq_number=#{oq_number}
+           
+        ]]>         
+ 
+   </select>
+   
+   <select id="selectOrderInfo" resultMap="C_P003Result04" parameterType="C_P003VO">
+   		<![CDATA[
+   		 select *
+   		 from orders o, orderdetail od, productsell ps
+   		 where o.order_number = od.order_number
+   		 and od.sell_number = ps.sell_number
+   		 and o.order_number = #{order_number}
+   		]]>
+   </select>   
+   
+   
+   
+
+   <insert id="responseInfo2" parameterType="java.util.Map">
+		<![CDATA[
+			insert into questions (qu_number,mem_id, qu_contents, qu_answer,sell_title,sell_thumbnail) 
+			values
+			 (qu_number.nextval,#{mem_id}, #{qu_contents}, #{qu_answer}, #{sell_title}, #{sell_thumbnail})   
+		]]>                 
+	</insert> 
+	
+	
+	
+	  <select id="responseInfo" resultMap="C_P003Result04" parameterType="C_P003VO">
+   		<![CDATA[
+            SELECT qu_number,mem_id, qu_contents,qu_answer,sell_title,sell_thumbnail
+            FROM questions 
+           
+            
+   		]]>
+   </select>
+   
+   
+   
+   <select id="selectQuestion" resultMap="C_P003Result04" parameterType="C_P003VO">
+   		<![CDATA[
+       	SELECT de_division,de_contents,mem_id
+        FROM declarations   
+        
+   		]]>
+   </select>      
+   
+   
+   <insert id="insertde" parameterType="java.util.Map">
+		<![CDATA[
+			insert into questions (de_number,mem_id, de_contents, de_division) 
+			values
+			 (de_number.nextval,#{mem_id}, #{de_contents}, #{de_division})     
+		]]>                 
+	</insert>                       
+   
+   
+  </mapper>

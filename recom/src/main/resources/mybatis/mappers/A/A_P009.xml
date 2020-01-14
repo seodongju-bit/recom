@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="A.P009">
+	<resultMap id="A_P009Result01" type="A_P009VO">
+		<result property="de_number" column="de_number"/>
+		<result property="mem_id" column="mem_id"/>
+		<result property="de_division" column="de_division"/>
+		<result property="de_date" column="de_date"/>
+		<result property="de_contents" column="de_contents"/>
+	</resultMap>
+	
+	
+	<select id="declarationsList" resultMap="A_P009Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+      	select de_number, mem_id, de_division, de_date, de_contents
+      	from declarations
+      ]]>
+        <where>
+          <if test="mem_id != '' and mem_id != null">
+            mem_id = #{mem_id}
+          </if>
+        </where>
+	</select>
+	<select id="conditionDeclaration" resultMap="A_P009Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+      	select de_number, mem_id, de_division, de_date, de_contents
+      	from declarations
+      ]]>
+       <where>
+          <if test="condition == 'de_number'">
+            de_number like '%' ||#{search} || '%'
+          </if>
+          <if test="condition == 'mem_id'">
+            mem_id like '%' ||#{search} || '%'
+          </if>
+        </where>
+	</select>
+	
+	<update id="updateData" parameterType="java.util.Map">
+	  <![CDATA[
+	  	update declarations 
+	  	set de_number = #{de_number}, mem_id = #{mem_id}, de_division = #{de_division}, de_contents = #{de_contents}
+	  	where mem_id = #{mem_id}
+	  ]]>
+	  </update>
+	<insert id="insertData" parameterType="java.util.Map">
+	  <![CDATA[insert into declarations (
+	  									  de_number,
+	  									  mem_id,
+	  									  de_division,
+	  									  de_contents,
+	  									  de_date
+	  									)
+								  values(
+								  		  #{de_number},
+								  		  #{mem_id},
+								  		  #{de_division},
+								  		  #{de_contents},
+								  		  sysdate
+								  	     )
+		]]>
+	</insert>
+	
+	<delete id="deleteData" parameterType="java.util.Map">
+	  delete declarations
+	  where mem_id = #{mem_id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+     <definition name="searchlayout"  template="/WEB-INF/views/common/main_layout.jsp">
+      <put-attribute name="title" value="" />
+      <put-attribute name="header" value="" />
+      <put-attribute name="body" value="" />
+      <put-attribute name="footer" value="" />
+   </definition>
+   <!-- 레이아웃 페이지 구분 -->
+  
+   <definition name="searchProd" extends="searchlayout">
+      <put-attribute name="title" value="상품 검색 결과" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="body" value="/WEB-INF/views/main/searchProd.jsp" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition> 
+   
+   <definition name="searchNull" extends="searchlayout">
+      <put-attribute name="title" value="상품 검색 결과" />
+      <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+      <put-attribute name="body" value="/WEB-INF/views/main/searchNull.jsp" />
+      <put-attribute name="footer" value="/WEB-INF/views/common/footer.jsp" />
+   </definition>
+   
+</tiles-definitions>
+                 

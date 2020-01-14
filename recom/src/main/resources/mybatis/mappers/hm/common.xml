@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="common">
+	<resultMap id="commonResult01" type="commonVO">
+		<result property="common_name" column="common_name" />
+		<result property="common_code" column="common_code" />
+	</resultMap>
+	
+
+	
+	<select id="searchCommon" resultMap="commonResult01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select * 
+         from commonlist
+      ]]>
+		<where>
+			<if test=" p_id != ''  and  p_id != null">
+				substr(common_code, 0,1) ='${p_id}'
+				
+			</if>
+		
+		</where>
+		order by common_code
+	</select>
+	
+		<select id="bigDivision" resultMap="commonResult01" parameterType="java.util.Map"> 
+      <![CDATA[
+      
+      	select * 
+         from commonlist
+         where common_code like('H___')
+         order by common_code
+      ]]>	
+	</select>   
+	
+
+	
+	<select id="smallDivision" resultMap="commonResult01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select * 
+         from commonlist
+         where common_code like('${p_code}_%')
+         order by common_code
+      ]]>	
+	</select>
+
+
+</mapper>

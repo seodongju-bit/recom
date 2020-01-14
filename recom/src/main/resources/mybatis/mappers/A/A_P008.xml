@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="A.P008">
+	<resultMap id="A_P008Result01" type="A_P008VO">
+		<result property="mem_no" column="mem_no"/>
+		<result property="mem_id" column="mem_id"/>
+		<result property="mem_nick" column="mem_nick"/>
+		<result property="mem_name" column="mem_name"/>
+		<result property="mem_pw" column="mem_pw"/>
+		<result property="mem_email1" column="mem_email1"/>
+		<result property="mem_email2" column="mem_email2"/>
+		<result property="mem_tel" column="mem_tel"/>
+		<result property="mem_zip" column="mem_zip"/>
+		<result property="mem_address1" column="mem_address1"/>
+		<result property="mem_address2" column="mem_address2"/>
+		<result property="mem_point" column="mem_point"/>
+		<result property="mem_division" column="mem_division"/>
+		<result property="mem_totalrc" column="mem_totalrc"/>
+		<result property="mem_monthrc" column="mem_monthrc"/>
+		<result property="mem_reviewgrade" column="mem_reviewgrade"/>
+		<result property="mem_verify" column="mem_verify"/>
+		<result property="mem_date" column="mem_date"/>
+		
+	</resultMap>
+	
+	
+	<select id="searchMember" resultMap="A_P008Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select mem_no, mem_id, mem_nick, mem_pw, mem_name, mem_email1, mem_email2, mem_tel, mem_zip, mem_address1, mem_address2, mem_point,
+                mem_division, mem_totalrc, mem_monthrc, mem_reviewgrade, mem_verify, mem_date
+         from members
+      ]]>
+        <where>
+          <if test="mem_id != '' and mem_id != null">
+            mem_id = #{mem_id}
+          </if>
+        </where>
+	</select>
+	
+	<select id="conditionMember"  resultMap = "A_P008Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select mem_no, mem_id, mem_nick, mem_pw, mem_name, mem_email1, mem_email2, mem_tel, mem_zip, mem_address1, mem_address2, mem_point,
+                mem_division, mem_totalrc, mem_monthrc, mem_reviewgrade, mem_verify, mem_date
+         from members
+      ]]>
+        <where>
+          <if test="condition == 'mem_no'">
+            mem_no like '%' ||#{search} || '%'
+          </if>
+          <if test="condition == 'mem_id'">
+            mem_id like '%' ||#{search} || '%'
+          </if>
+          <if test="condition == 'mem_nick'">
+            mem_nick like '%' ||#{search} || '%'
+          </if>
+        </where>
+	</select>
+	
+	<update id="updateData" parameterType="java.util.Map">
+	 <![CDATA[
+	 		  update members 
+			  set  mem_no = #{mem_no},
+			       mem_id = #{mem_id},
+			       mem_nick = #{mem_nick},
+			       mem_pw = #{mem_pw},
+			       mem_name = #{mem_name},
+			       mem_email1 = #{mem_email1},
+			       mem_email2 = #{mem_email2},
+			       mem_tel = #{mem_tel},
+			       mem_zip = #{mem_zip},
+			       mem_address1 = #{mem_address1},
+			       mem_address2 = #{mem_address2},
+			       mem_point = #{mem_point},
+			       mem_division = #{mem_division},
+			       mem_totalrc = #{mem_totalrc},
+			       mem_monthrc = #{mem_monthrc},
+			       mem_reviewgrade = #{mem_reviewgrade},
+			       mem_verify = #{mem_verify},
+			  where mem_id = #{mem_id}
+	  ]]>
+	</update>
+	
+	<insert id="insertData" parameterType="java.util.Map">
+	  <![CDATA[
+	  			insert into members(
+								mem_no, 
+								mem_id, 
+								mem_pw,
+								mem_nick, 
+								mem_name, 
+								mem_email1, 
+								mem_email2, 
+								mem_tel, 
+								mem_zip, 
+								mem_address1, 
+								mem_address2,
+								mem_point, 
+								mem_division, 
+								mem_totalrc, 
+								mem_monthrc, 
+								mem_reviewgrade, 
+								mem_verify, 
+								mem_date
+								)
+						values(
+								mem_no.nextval,
+								#{mem_id},
+								#{mem_pw},
+								#{mem_nick},
+								#{mem_name}, 
+								#{mem_email1}, 
+								#{mem_email2}, 
+								#{mem_tel}, 
+				   				#{mem_zip}, 
+				   				#{mem_address1}, 
+				   				#{mem_address2}, 
+				   				#{mem_point}, 
+				   				#{mem_division}, 
+				   				#{mem_totalrc},
+				   				#{mem_monthrc}, 
+				   				#{mem_reviewgrade}, 
+				   				#{mem_verify}, 
+				   				sysdate
+				   				)
+		]]>
+	</insert>
+	
+	<delete id="deleteData" parameterType="java.util.Map">
+	  delete members
+	  where mem_id = #{mem_id}
+	</delete>
+	
+</mapper>

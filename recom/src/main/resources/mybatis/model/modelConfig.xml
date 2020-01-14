@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="project.A.P001.vo.A_P001VO"  alias="A_P001VO" />
+		<typeAlias type="project.A.P002.vo.A_P002VO"  alias="A_P002VO" />
+		<typeAlias type="project.A.P003.vo.A_P003VO"  alias="A_P003VO" />
+		<typeAlias type="project.A.P004.vo.A_P004VO"  alias="activeVO" />
+		<typeAlias type="project.A.P006.vo.A_P006VO"  alias="A_P006VO" />
+		<typeAlias type="project.A.P008.vo.A_P008VO"  alias="A_P008VO"/>
+		<typeAlias type="project.A.P009.vo.A_P009VO"  alias="A_P009VO"/>
+		<typeAlias type="project.B.P001.vo.B_P001VO"  alias="B_P001VO" />
+		<typeAlias type="project.B.P002.vo.B_P002VO"  alias="B_P002VO" />
+		<typeAlias type="project.C.P001.vo.C_P001VO"  alias="eventVO" />
+	    <typeAlias type="project.C.P003.vo.C_P003VO"  alias="C_P003VO" />
+	    <typeAlias type="project.D.P001.vo.D_P001VO"  alias="D_P001VO" />
+		<typeAlias type="project.E.P001.vo.E_P001VO"  alias="E_P001VO" />
+		<typeAlias type="project.F.P001.vo.F_P001VO"  alias="F_P001VO" />
+		<typeAlias type="project.F.P002.vo.F_P002VO"  alias="F_P002VO" />
+		<typeAlias type="project.controller.commonVO"  alias="commonVO" />
+		<typeAlias type="project.A.P005.vo.A_P005VO"  alias="basketVO" />
+		<typeAlias type="project.A.P007.vo.A_P007VO"  alias="makecouponVO" />
+		<typeAlias type="project.main.paging.MainPagingVO" alias="mainPagingVO"/>
+		<typeAlias type="project.search.paging.SearchPagingVO" alias="searchPagingVO"/>
+	</typeAliases>
+</configuration>                                                                                                                        

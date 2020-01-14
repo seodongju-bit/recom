@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="A.P010">
+	<resultMap id="A_P010Result01" type="java.util.Map">
+		
+	</resultMap>
+	
+	
+	<select id="searchProfile" resultMap="A_P010Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+      	select mem_nick, mem_content, NVL(mem_profile, 'resources/image/nothing.jpg') as mem_profile, mem_totalrc, mem_monthrc
+      	from members
+      	where mem_id = #{mem_id}
+      ]]>
+    
+	</select>
+	
+	
+	<update id="saveProfile"  parameterType="java.util.Map"> 
+      <![CDATA[
+      	update members
+      	set mem_nick = #{mem_nick},
+      		mem_profile = #{mem_profile},
+      		mem_content = #{mem_content}
+      	where mem_id = #{mem_id}
+      ]]>
+	</update>
+	
+	<select id="searchReview" resultType="java.util.HashMap" parameterType="java.util.Map" > 
+      <![CDATA[
+      select *
+	  from review r ,product p, productsell ps
+	  where r.pro_number = p.pro_number
+	  and r.sell_number = ps.sell_number 
+	  and r.mem_id = #{mem_id}
+	  order by review_stdate desc
+	  	
+      ]]>
+    
+	</select>
+</mapper>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="F.P002">
+	<resultMap id="F_P002Result01" type="F_P002VO">
+		<result property="sell_number" column="sell_number" />
+		<result property="pro_number" column="pro_number" />
+		<result property="pro_name" column="pro_name" />
+		<result property="sell_price" column="sell_price" />
+		<result property="pro_price" column="pro_price" />
+		<result property="sell_score" column="sell_score" />
+		<result property="pro_score" column="pro_score" />
+		<result property="sell_contents" column="sell_contents" />
+		<result property="sell_total" column="sell_total" />
+		<result property="sell_date" column="sell_date" />
+		<result property="sell_title" column="sell_title" />
+		<result property="sell_thumbnail" column="sell_thumbnail" />
+		<result property="sell_quantity" column="sell_quantity" />
+		<result property="mem_ID" column="mem_ID" />
+		<result property="option_yn" column="option_yn" />
+		<result property="bigCtgrCode" column="bigc" />
+		<result property="smallCtgrCode" column="pro_division" />
+		<result property="bigCtgrName" column="bign" />
+		<result property="smallCtgrName" column="common_name" />	
+	</resultMap>
+	 
+	<resultMap id="F_P002Result02" type="F_P002VO">
+		<result property="sell_number" column="sell_number" />
+		<result property="option_size" column="option_size" />
+		<result property="option_color" column="option_color" />
+		<result property="option_quantity" column="option_quantity" />
+		<result property="no_number" column="no_number" />
+		<result property="no_title" column="no_title" />
+	</resultMap>
+	
+	<resultMap id="F_P002Result03" type="java.util.Map">
+	</resultMap>
+	
+	<select id="searchItem" resultMap="F_P002Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select sell_number, ps.pro_number, pro_name, sell_price, sell_score, sell_contents, sell_contents, sell_total
+         , sell_date, sell_title, sell_thumbnail, sell_quantity, ps.mem_ID, option_yn, pro_division, common_name, substr(common_code,0,4) bigc
+         ,(select common_name from commonlist where common_code = substr(pro_division,0,4)) bign ,DELIVERY_PRICE, pro_score, pro_price, pro_brand
+         from productsell ps, product p ,commonlist cl
+         where ps.pro_number = p.pro_number
+		 and p.pro_division = cl.common_code
+         and sell_number = ${p_id}
+      ]]>
+      <!--  
+		<where>
+			ps.pro_number = p.pro_number
+			and p.pro_division = cl.common_code
+			<if test=" p_id != ''  and  p_id != null">
+				and sell_number = ${p_id}
+			</if>
+		</where>
+		 -->
+	</select>
+	  
+	<select id="searchEvent" resultMap="F_P002Result01" parameterType="java.util.Map"> 
+	  <![CDATA[ 
+      select n.no_number, no_title
+      from notice n , eventitems ei
+      where n.no_number =  ei.no_number
+      and ei.sell_number = #{p_id}
+      and no_stdate <= sysdate
+      and no_enddate+1 > sysdate
+      order by writedate desc
+      ]]>  
+	</select>
+	
+	<select id="searchReview" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+         select *
+         from review
+         where sell_number = #{sell_number}
+         order by review_stdate desc
+        
+      ]]>
+	</select>
+	
+	<select id="searchMonthReview" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+         select *
+		 from (select *
+         	from review
+         	where sell_number =  #{sell_number}
+         	order by review.review_monthpoint desc)
+		 where rownum <= 5
+      ]]>
+	</select>
+	
+	<select id="searchTotalReview" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+         select *
+		 from (select *
+         	from review
+         	where sell_number =  #{sell_number}
+         	order by review.review_totalpoint desc)
+		 where rownum <= 5
+      ]]>
+	</select>
+	 
+	
+	<select id="searchReviewInfo" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+         select *
+		 from review r, members m, productsell ps
+		 where r.mem_id = m.mem_id
+		 and r.sell_number = ps.sell_number
+		 and review_number = #{p_id}
+      ]]>
+	</select>
+	
+	<select id="searchReviewRank" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from (select review_number, review_title, REVIEW_CONTENT, r.MEM_ID, REVIEW_MONTHPOINT, REVIEW_YOUTUBE, REVIEW_URL, mem_nick, REVIEW_STDATE
+		 	from review r ,product p, members m
+		 	where r.pro_number = p.pro_number
+		 	and r.mem_id = m.mem_id
+		 	and pro_division like('${p_id}')
+			order by REVIEW_MONTHPOINT desc)
+	  where rownum <= 5
+      ]]>
+	</select>
+	
+	<select id="bestReviewPlus" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from (select review_number, review_title, REVIEW_CONTENT, r.MEM_ID, REVIEW_MONTHPOINT, REVIEW_YOUTUBE, REVIEW_URL, MEM_NICK
+		 	from review r ,product p, members m 
+		 	where r.pro_number = p.pro_number
+		 	and r.mem_id = m.mem_id
+		 	and pro_division like('${p_id}') 
+			order by REVIEW_MONTHPOINT desc)
+	  where rownum <= 100 
+      ]]>
+	</select>
+	
+	<select id="searchProRank" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from (select *
+		 	from product p
+		 	where pro_division like('${p_id}')
+			order by PRO_SCORE desc)
+	  where rownum <= 5
+      ]]>
+	</select>
+	 
+	<select id="matchThumbnail" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+      select SELL_THUMBNAIL
+      from productsell
+      where pro_number = #{PRO_NUMBER}
+      and rownum <= 1
+      ]]>
+	</select>
+	
+	<select id="proTopReview" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from (select *
+		 	from review
+		 	where pro_number = #{PRO_NUMBER}
+			order by REVIEW_MONTHPOINT desc)
+	  where rownum <= 3
+      ]]>
+	</select>
+	
+	<select id="searchReviewList" resultMap="F_P002Result03" parameterType="java.util.Map"> 
+      <![CDATA[ 
+      select *
+		 	from members m, review r, product p
+		 	where p.pro_number = r.pro_number
+		 	and r.mem_id = m.mem_id
+		 	and pro_division like('${p_id}')
+		 	and REVIEW_TOTALPOINT >= 3
+			order by REVIEW_STDATE desc
+      ]]>
+	</select>
+	
+	
+	
+	
+	<select id="searchOption" resultMap="F_P002Result02" parameterType="java.util.Map"> 
+      <![CDATA[
+         select sell_number, option_size, option_color, option_quantity
+
+         from selloption
+         where sell_number = ${p_id}
+         order by to_number(option_size) 
+      ]]>
+
+	</select>
+ 
+	<insert id="addBasket" parameterType="java.util.Map">
+		<![CDATA[
+			insert into basket2 (mem_id, sell_number, ba_size, ba_color, ba_quantity)
+			values('${p_id}','${sell_number}','${size}','${color}', '${quantity}')
+		]]>
+	</insert>
+ 
+
+
+
+
+	<select id="mainList" resultType="project.F.P002.vo.F_P002VO" parameterType="project.main.paging.MainPagingVO">
+	<!-- 각각의 상품을 등록일 순으로 조회 -->
+	  <![CDATA[
+	  	select sell_number, sell_title, sell_price, sell_thumbnail
+		from (
+	        select sell_number, sell_title, sell_price, sell_thumbnail,
+	        row_number() over (order by sell_number desc) as rNum
+	        from productsell
+	        ) mb
+       where rNum between #{rowStart} and #{rowEnd}
+	  ]]>
+	</select>
+	
+	<select id="countList" resultType="Integer">
+	<!-- 조회한 상품의 갯수를 뿌려줌 -->
+		<![CDATA[
+			select count(sell_number) as totalCount
+			from productsell
+			where sell_number > 0
+		]]>
+	</select>
+	
+	<select id="countProd" resultType="Integer">
+		<![CDATA[
+			select count(sell_number) as totalCount
+			from productsell ps, product p
+			where ps.pro_number = p.pro_number
+	    		and (sell_title like '%' || #{searchWord} || '%'
+	    		or pro_name like '%' || #{searchWord} || '%'
+	    		or pro_brand like '%' || #{searchWord} || '%'
+	    		or PRO_VENDOR like '%' || #{searchWord} || '%'
+	    		)
+		]]>
+	</select>
+	
+	<!-- 검색어 자동완성 -->
+	<select id="searchKeyword"  resultType="String" parameterType="String">
+	  <![CDATA[
+	    select pro_name
+	    from product
+	    where pro_name like '%' || #{keyword} || '%'
+		order by pro_name
+	  ]]>
+	</select>
+	
+	<!-- 상품 검색 결과 -->
+	<select id="searchWord" resultType="project.F.P002.vo.F_P002VO" parameterType="project.search.paging.SearchPagingVO">
+	
+	    select sell_number, sell_thumbnail, sell_title, sell_price, sell_date, mem_ID, pro_price
+	    from (
+	    		select sell_number, sell_thumbnail, sell_title, sell_price, sell_date, ps.mem_id, pro_price,
+	    		row_number() over (order by sell_number desc) as rNum
+	    		from productsell ps, product p
+	    		where ps.pro_number = p.pro_number
+	    		and (sell_title like '%' || #{searchWord} || '%'
+	    		or pro_name like '%' || #{searchWord} || '%'
+	    		or pro_brand like '%' || #{searchWord} || '%'
+	    		or PRO_VENDOR like '%' || #{searchWord} || '%'
+	    		)
+	    		) mb
+	    where rNum between #{rowStart} and #{rowEnd}
+	    order by #{sort}
+	   
+	</select>
+	
+	<sql id="search">
+		<if test="searchType == null">
+			where sell_title like '%' || #{searchWord} || '%'
+		</if>
+	</sql>
+	
+	<select id="countSearch" resultType="int">
+			select count(sell_number)
+			from productsell
+					<include refid="search"></include>
+		<![CDATA[
+			and sell_number > 0
+		]]>
+	</select>
+	
+	<select id="mainBanner" resultType="java.util.HashMap" parameterType="java.util.Map"> 
+	  <![CDATA[ 
+      select no_number, no_title, no_banner
+      from notice
+      where no_division = '이벤트'
+      and no_stdate <= sysdate
+      and no_enddate+1 > sysdate
+      order by writedate desc
+      ]]>  
+	</select>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="B.P002">
+
+	<resultMap id="B_P002Result01" type="B_P002VO">
+		<result property="pro_number" column="pro_number" />
+		<result property="pro_vendor" column="pro_vendor" />
+		<result property="pro_name" column="pro_name" />
+		<result property="pro_brand" column="pro_brand" />
+	</resultMap>
+	
+	<resultMap id="B_P002Result02" type="java.util.Map">
+		<result property="sell_number" column="nextval" />
+	</resultMap>
+	
+	<resultMap id="B_P002Result03" type="B_P002VO">
+		<result property="od_quantity" column="od_quantity"/>
+	</resultMap>
+	<resultMap id="B_P003Result04" type="java.util.Map">
+	    <result property="orderer_id" column="mem_id"/>
+	    <result property="order_number" column="order_number"/>
+	</resultMap>
+	
+	<select id="searchNum" resultMap="B_P002Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select pro_number, pro_vendor, pro_name, pro_brand
+         from product
+         where pro_number like '%${p_id}%'
+         	or pro_vendor like '%${p_id}%'
+         	or pro_name like '%${p_id}%'
+         	or pro_brand like '%${p_id}%'
+         order by pro_number
+      ]]>
+   
+	</select>
+
+	<select id="nextSell" resultMap="B_P002Result02" parameterType="java.util.Map" > 
+      <![CDATA[
+         select sell_number.nextval
+         from dual
+      ]]>
+	</select>
+	
+	<insert id="addSell" parameterType="java.util.Map" >
+		<![CDATA[
+			insert into productsell(sell_number, pro_number,sell_thumbnail, sell_price, sell_contents, sell_date, sell_title, sell_quantity, mem_id, option_yn)
+			values('${sell_number}','${pro_number}','${sell_thumbnail}','${sell_price}','${sell_contents}',sysdate,'${sell_title}','${sell_quantity}','${mem_id}','${option_yn}')
+		]]>
+	 	
+	</insert>
+	
+	<insert id="addOption" parameterType="java.util.Map">
+		<![CDATA[
+			insert into selloption(sell_number, option_size, option_color, option_quantity)
+			values('${sell_number}','${option_size}','${option_color}','${option_quantity}')
+		]]>
+	</insert>
+	
+	
+	<select id="orderRequestList" resultMap="B_P002Result03">
+	 	<![CDATA[
+	 			select order_number, pro_name, order_date, od_state, mem_id, od_quantity, sell_price
+	 		from (
+	 			select o.order_number, p.pro_name, o.order_date, od.od_state, ps.mem_id, od.od_quantity, ps.sell_price, row_number() over (order by o.order_number desc) as rNum
+	 			from orderdetail od, orders o, productsell ps, product p
+		 		where od.order_number = o.order_number
+		 		and od.sell_number = ps.sell_number
+		 		and ps.pro_number = p.pro_number 
+		 		and ps.mem_id = #{p_id}
+		 		) mb
+		 	where rNum between #{rowStart} and #{rowEnd}
+	 	]]>
+	</select>
+	
+	<select id="countOrdererList" resultType="Integer">
+		<![CDATA[
+			select count(o.order_number) as totalCount
+			from orderdetail od, orders o, productsell ps, product p
+		 		where od.order_number = o.order_number
+		 		and od.sell_number = ps.sell_number
+		 		and ps.pro_number = p.pro_number 
+		 		and ps.mem_id = #{p_id}
+		]]>
+	</select>
+	
+	<select id="ordererInfoList" resultMap="B_P003Result04">
+		<![CDATA[
+			select *
+			from orders o, orderdetail od, members m, productsell ps, product p
+			where od.order_number = o.order_number
+			and od.sell_number = ps.sell_number
+			and ps.pro_number = p.pro_number
+			and o.mem_id = m.mem_id
+			and o.order_number = #{order_number}
+			and p.pro_name = #{pro_name}
+			and od.od_quantity = #{od_quantity}
+		]]>
+	</select>
+	
+	<update id="changeState" parameterType="B_P002VO">
+		<![CDATA[
+		    update orderdetail
+		    set od_state = #{od_state}
+		    where order_number = #{order_number}
+	        and od_size = #{od_size}
+	        and od_color = #{od_color}
+		]]>
+	</update>
+	
+</mapper>

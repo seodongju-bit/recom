@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="Customers.chat">
+	<resultMap id="messagesResult" type="A_P006VO">
+		<result property="chat_no" column="chat_no" />
+		<result property="sender" column="sender" />
+		<result property="receiver" column="receiver" />
+		<result property="contents" column="contents" />
+		<result property="send_date" column="send_date" />
+		<result property="me_at" column="me_at" />		
+	</resultMap>
+	<resultMap id="membersResult" type="A_P001VO">
+		<result property="mem_id" column="mem_id" />
+		<result property="mem_nick" column="mem_nick" />
+		<result property="mem_division" column="mem_division" />
+	</resultMap>
+	
+	<resultMap id="prodResult" type="F_P002VO">
+		<result property="sell_title" column="sell_title" />
+	</resultMap>
+	
+	<select id="selectMemberList" parameterType="string" resultMap="membersResult">
+	    <![CDATA[
+			SELECT  mem_id, mem_name, mem_nick
+			FROM members b1,
+			(
+			    SELECT other_id,MAX(chat_no) max_no
+			    FROM
+			    (
+			        SELECT sender other_id, chat_no
+			        FROM chat
+			        WHERE receiver=#{mem_id}
+			        UNION ALL
+			        SELECT receiver other_id, chat_no
+			        FROM chat
+			        WHERE sender=#{mem_id}
+			    )
+			    GROUP BY other_id
+			)  b2
+			WHERE b1.mem_id=b2.other_id
+			
+			ORDER BY max_no DESC
+	    ]]>
+	</select>
+
+	<select id="selectMessageList" parameterType="A_P006VO" resultMap="messagesResult">
+	    <![CDATA[
+			SELECT t.*
+			FROM
+			(
+			    SELECT chat_no,sender,receiver,contents,send_date,'true' me_at
+			    FROM chat
+			    WHERE sender=#{sender}
+			    AND receiver=#{receiver}
+			    UNION ALL
+			    SELECT chat_no,sender,receiver,contents,send_date,'false' me_at
+			    FROM chat
+			    WHERE sender=#{receiver}
+			    AND receiver=#{sender}
+			) t
+			ORDER BY chat_no
+	    ]]>
+	</select>
+	
+	<insert id="insertMessage" parameterType="A_P006VO">
+	  <![CDATA[
+           
+      INSERT INTO chat (CONTENTS, RECEIVER, SENDER, send_date, chat_no) 
+      VALUES (#{contents}, #{receiver}, #{sender},#{send_date}, chat_list.nextval)
+       ]]>
+   </insert>
+   
+
+
+
+	<select id="selectSearchList" parameterType="map" resultMap="membersResult">
+	    <![CDATA[
+	    	SELECT mem_id, mem_nick
+			FROM members
+			WHERE mem_id != #{mem_id}
+			AND mem_division = '2'
+			AND ( mem_id LIKE '%'||#{keyword}||'%' OR mem_nick LIKE '%'||#{keyword}||'%' )
+	    ]]>
+	</select>
+	
+	<select id="selectSeller" parameterType="string" resultMap="membersResult">
+	    <![CDATA[
+			select p.mem_id, m.mem_nick, m.mem_name
+			from members m, productsell p
+			where m.mem_id = p.mem_id
+			and p.mem_id = #{mem_id}
+			and p.sell_number = #{sell_number}
+	    ]]>
+	</select>
+	
+	<select id="selectprod" parameterType="string" resultMap="prodResult">
+	    <![CDATA[
+			select sell_title
+			from productsell
+			where sell_number = #{sell_number}
+			and mem_id = #{mem_id}
+	    ]]>
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.product">
+   <resultMap id="F_P001Result01" type="F_P001VO">
+      <result property="sell_number" column="sell_number" />
+      <result property="pro_number" column="pro_number" />
+      <result property="sell_price" column="sell_price" />
+      <result property="pro_price" column="pro_price" />
+      <result property="sell_score" column="sell_score" />
+      <result property="sell_title" column="sell_title" />
+      <result property="sell_thumbnail" column="sell_thumbnail" />
+      <result property="mem_id" column="mem_id" />
+      <result property="pro_vendor" column="pro_vendor" />
+      <result property="pro_explain" column="pro_explain" />
+       <result property="common_code" column="common_code" />
+       <result property="common_name" column="common_name" />   
+   </resultMap>
+   
+   <resultMap id="F_P001_D04Result01" type="F_P001VO">
+      <result property="no_number" column="no_number" />
+      <result property="ev_discount" column="ev_discount" />
+      <result property="event_explain" column="event_explain" />
+     
+      <result property="sell_number" column="sell_number" />
+      <result property="pro_number" column="pro_number" />
+      <result property="sell_price" column="sell_price" />
+      <result property="pro_price" column="pro_price" />
+      <result property="sell_score" column="sell_score" />
+      <result property="sell_title" column="sell_title" />
+      <result property="sell_thumbnail" column="sell_thumbnail" />
+      <result property="mem_id" column="mem_id" />
+      <result property="pro_vendor" column="pro_vendor" />
+            
+       <result property="common_code" column="common_code" />
+       <result property="common_name" column="common_name" />   
+                 
+   </resultMap>
+
+
+   <resultMap id="F_P001_D03Result01" type="F_P001VO">
+  		<result property="sell_shippingFee" column="DELIVERY_PRICE" />
+   </resultMap>
+
+
+
+  <resultMap id="F_P001_D01Result01" type="F_P001VO">
+       <result property="review_number" column="review_number" />
+       <result property="sell_number" column="sell_number" />
+        <result property="sell_title" column="sell_title" />
+         <result property="sell_thumbnail" column="sell_thumnail" />
+          <result property="sell_price" column="sell_price" />
+       <result property="pro_number" column="pro_number" />
+       <result property="mem_no" column="mem_no" />
+       <result property="review_monthpoint" column="review_monthpoint" />
+     <result property="review_content" column="review_content" />
+        <result property="mem_id" column="mem_id" />
+    
+   </resultMap>
+
+  <resultMap id="memberReviewDAO" type="F_P001VO">
+     <result property="review_number" column="review_number" />
+     <result property="sell_title" column="sell_title" />
+     <result property="review_content" column="review_content" />
+     <result property="mem_id" column="mem_id" />
+     <result property="review_stdate" column="review_stdate" />
+     <result property="sell_number" column="sell_number" />
+     
+
+   </resultMap>
+   
+   	<resultMap id="F_P001Result00" type="F_P001VO">
+		<result property="sell_number" column="sell_number" />
+		<result property="option_size" column="option_size" />
+		<result property="option_color" column="option_color" />
+		<result property="option_quantity" column="option_quantity" />
+	</resultMap>
+	
+	
+	<resultMap id="bannerList" type="java.util.Map">
+		<result property="no_number" column="no_number" />
+	</resultMap>
+
+
+
+   <select id="selectItem" resultMap="F_P001Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select *    
+         from product p, productsell s
+         where p.pro_number = s.pro_number              
+         AND pro_division LIKE '${p_id}%'
+      ]]>         
+
+   </select>  
+   
+
+         
+      	<select id="searchoption" resultMap="F_P001Result00" parameterType="java.util.Map"> 
+      <![CDATA[
+         select sell_number, option_size, option_color, option_quantity
+         from selloption
+         where sell_number = ${p_id}
+         order by to_number(option_size) 
+      ]]>
+
+	</select>    
+                                  
+   <select id="selectItem1" resultMap="F_P001_D04Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+         select *              
+        from eventitems i, commonlist cl , product p, productsell s
+        where
+        i.sell_number = s.sell_number AND
+         cl.common_code =  p.pro_division AND
+         p.pro_number = s.pro_number 
+      ]]>          
+     
+      
+   </select>
+
+
+	<select id="selectItem2" resultMap="F_P001_D03Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from(
+      SELECT sell_thumbnail, sell_title, ps.sell_number, sell_score, sell_price, pro_price, sell_month, DELIVERY_PRICE
+      FROM productsell ps, product p
+      where ps.pro_number = p.pro_number
+      and pro_division like('${ctgrNum}')
+      order by sell_month desc) 
+      where rownum <=100
+      ]]>
+  
+	</select>   
+
+
+ 
+
+
+      <select id="selectItem5" resultMap="F_P001_D01Result01" parameterType="java.util.Map"> 
+      <![CDATA[
+     SELECT r.review_number, s.sell_number,s.pro_number,m.mem_no,r.review_monthpoint,r.review_content,m.mem_id,s.sell_title,s.sell_thumbnail,s.sell_price
+    FROM review r,members m,productsell s
+    WHERE s.sell_number = r.sell_number AND
+    s.pro_number = r.pro_number AND 
+    m.mem_no = r.mem_id
+    ORDER BY r.review_monthpoint desc
+          
+      ]]>          
+                               
+      
+   </select>  
+   
+   
+   
+         <select id="memberReviewList" resultMap="memberReviewDAO" > 
+      <![CDATA[
+      	 	SELECT * 
+		FROM (
+			SELECT ROWNUM RN, A.* 
+				FROM (
+						SELECT r.review_number,r.review_content,r.review_stdate,s.sell_title,m.mem_id
+						FROM review r, members m, productsell s 
+						WHERE r.sell_number = s.sell_number AND
+						m.mem_id = s.mem_id
+						ORDER BY r.review_number DESC
+						)A   
+				)
+		 WHERE RN BETWEEN #{start} AND #{end}          
+      	
+          
+      ]]>          
+                               
+            
+   </select>  
+   
+   	<select id="countBoard" resultType="int">      
+	<![CDATA[                        
+	SELECT COUNT(*) FROM questions
+	]]>
+	</select>
+
+	<select id="bannerList" resultMap="bannerList" parameterType="java.util.Map"> 
+      <![CDATA[
+      select no_number, no_title, to_char(no_stdate,'YYYY-MM-DD')no_stdate, to_char(no_enddate, 'YYYY-MM-DD')no_enddate, no_banner
+      from notice
+      where no_division = '이벤트'
+      and no_stdate <= sysdate
+      and no_enddate+1 > sysdate
+      order by writedate desc
+      ]]>          
+   	</select> 
+	
+	<select id="preBannerList" resultType="java.util.HashMap" parameterType="java.util.Map"> 
+      <![CDATA[
+      select no_number, no_title, to_char(no_stdate,'YYYY-MM-DD')no_stdate, to_char(no_enddate, 'YYYY-MM-DD')no_enddate, no_banner
+      from notice
+      where no_division = '이벤트'
+      and no_stdate >= sysdate
+      order by writedate desc
+      ]]>          
+	 </select> 
+	 
+	 <select id="endBannerList" resultType="java.util.HashMap" parameterType="java.util.Map"> 
+      <![CDATA[
+      select no_number, no_title, to_char(no_stdate,'YYYY-MM-DD')no_stdate, to_char(no_enddate, 'YYYY-MM-DD')no_enddate, no_banner
+      from notice
+      where no_division = '이벤트'
+      and no_enddate+1 < sysdate
+      order by writedate desc
+      ]]>          
+	 </select> 
+	
+	  <select id="eventItemSearch" resultType="java.util.HashMap" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from eventitems ei, productsell ps
+      where ei.sell_number = ps.sell_number
+      and no_number = #{event_no}
+      order by sell_month desc
+      ]]>          
+	 </select> 
+
+	
+	<select id="eventSearch" resultType="java.util.HashMap" parameterType="java.util.Map"> 
+      <![CDATA[
+      select *
+      from notice
+      where no_number = #{event_no}
+      ]]>          
+	 </select> 
+  
+</mapper>         
